@@ -1,15 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
-  </body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Unicode Search</title>
+        <style>
+            :root { --text: #000; --bg: #fff; }
+            @media (prefers-color-scheme: dark) { :root { --text: #eee; --bg: #111; } }
+            body { background-color: var(--bg); color: var(--text); }
+        </style>
+    </head>
+    <body>
+        <h1>Unicode Search</h1>
+
+
+        <p>You can search for:</p>
+        <ul>
+            <li>Single characters, e.g. <code>9</code></li>
+            <li>Numeric code points, e.g. <code>97</code> or <code>0x62</code></li>
+            <li>Character (partial) names, e.g. <code>multiocular</code></li>
+            <li>Combinations of the above, e.g. <code>9, 97, 0x62, multiocular, 0x63 - 101</code></li>
+        </ul>
+        <input type="search" autofocus id="inputbox" value="9, 97, 0x62, multiocular, 0x63 - 100" size=100
+            onkeyup="renderChars(parseOneInput(this.value))"
+            />
+
+        <table>
+            <script>
+                for (let i = 0; i < 16; i++) {
+                    document.write("<tr>");
+                    for (let j = 0; j < 5; j++) {
+                        document.write(`<td width=25% id=char${ i * 5 + j } />`);
+                    }
+                    document.write("</tr>");
+                }
+            </script>
+        </table>
+    </body>
+    <script>
+#include "app.js"
+#include "chars.js"
+renderChars(parseOneInput(document.getElementById("inputbox").value));
+    </script>
 </html>
