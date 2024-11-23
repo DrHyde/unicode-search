@@ -6,7 +6,7 @@ about them.
 
 # Installation / Development
 
-You will need make(1), `wget`, `node` and `npm` installed.
+You will need make(1), a C pre-processer, `wget`, `node` and `npm` installed.
 
 To install Electron and all its jibber-jabber:
 
