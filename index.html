@@ -12,7 +12,6 @@
     <body>
         <h1>Unicode Search</h1>
 
-
         <p>You can search for:</p>
         <ul>
             <li>Single characters, e.g. <code>9</code></li>
@@ -20,6 +19,7 @@
             <li>Character (partial) names, e.g. <code>multiocular</code></li>
             <li>Combinations of the above, e.g. <code>9, 97, 0x62, multiocular, 0x63 - 101</code></li>
         </ul>
+        <p id="githublink">Source code is available at <a href="https://github.com/DrHyde/unicode-search">GitHub</a></p>
         <input type="search" autofocus id="inputbox" value="9, 97, 0x62, multiocular, 0x63 - 100" size=100
             onkeyup="renderChars(parseOneInput(this.value))"
             />
