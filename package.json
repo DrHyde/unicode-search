@@ -1,6 +1,6 @@
 {
   "name": "Unicode-search",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Search for Unicode characters, by name, by code point, and by encoded bytes",
   "main": "main.js",
   "scripts": {
