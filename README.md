@@ -4,6 +4,9 @@ This is a simple Electron app that lets you search for characters,
 by name, by character, or by code point, and see useful information
 about them.
 
+Most of the code is, of course, not Electron-specific, and it will
+also build a CLI version which I think is much more useful.
+
 # Installation / Development
 
 You will need make(1), a C pre-processer, `wget`, `node` and `npm` installed.
@@ -22,6 +25,10 @@ flavour of executable.
 Or you can `make dev` to run it in dev mode.
 
 To clear out auto-generated files and built artifacts, `make clean`.
+
+If you are on a Mac and have a `$HOME/bin` then you can:
+
+- make install
 
 # Contributing
 
