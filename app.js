@@ -23,7 +23,7 @@ function parseOneInput (userInput) {
     return userInputs;
   // } elsif( userInput contains combining characters ) {
   // ...
-  } else if (userInput.length >= 5) {
+  } else if (userInput.length >= 4) {
     const results = [];
     unicodeDataTxt.split('\n').forEach((line) => {
       const fields = line.split(';');
@@ -66,7 +66,7 @@ function renderChars (chars) {
         <tr height=75%>
           <td colspan=2 align=center style='font-size: 400%'>${
             (name && name.startsWith('COMBINING') ? '&#x25CC;' : '') +
-              String.fromCharCode(char)
+              String.fromCodePoint(char)
           }</td>
         </tr>
         <tr>
