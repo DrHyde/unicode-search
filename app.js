@@ -47,49 +47,6 @@ function getSingleCharFromSingleChar (userInput) { return userInput.charCodeAt(0
 
 function getSingleCharFromInt (userInput) { return parseInt(userInput); }
 
-function renderChars (chars) {
-  // blank any previous characters
-  for (let i = 0; i < 16 * 5; i++) {
-    const elem = document.getElementById(`char${i}`);
-    elem.innerHTML = '';
-    elem.style.border = 'none';
-  }
-  // now show the user what they asked for
-  for (let i = 0; i < chars.length; i++) {
-    const char = chars[i];
-    const elem = document.getElementById(`char${i}`);
-    const name = charToName(char);
-
-    elem.style.border = '2px solid';
-    elem.innerHTML = `
-      <table width=100% height=100%>
-        <tr height=75%>
-          <td colspan=2 align=center style='font-size: 400%'>${
-            (name && name.startsWith('COMBINING') ? '&#x25CC;' : '') +
-              String.fromCodePoint(char)
-          }</td>
-        </tr>
-        <tr>
-          <th valign=top align=right>Codepoint</th>
-          <td>${char} (0x${char.toString(16)})</td>
-        </tr>
-        <tr>
-          <th valign=top align=right>UTF-8</th>
-          <td>${
-            charToUTF8bytes(char)
-              .map(b => '0x' + b.toString(16).padStart(2, '0'))
-              .join(' ')
-          }</td>
-        </tr>
-        <tr>
-          <th valign=top align=right>Name</th>
-          <td>${charToName(char).replace(/</, '&lt;')}</td>
-        </tr>
-      </table>
-    `;
-  }
-}
-
 const charnamesByHex = new Map();
 function charToName (char) {
   const hexChar = char.toString(16).padStart(4, '0').toUpperCase();
