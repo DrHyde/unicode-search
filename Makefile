@@ -10,7 +10,7 @@ install: build
 	cp out/unicode-search $$HOME/bin
 
 out/unicode-search: app.js chars.js unicode-search.cli.js
-	@mkdir out
+	@mkdir out 2>/dev/null || true
 	(echo '#!/usr/bin/env node'; cat app.js chars.js unicode-search.cli.js) > out/unicode-search
 	chmod +x out/unicode-search
 
