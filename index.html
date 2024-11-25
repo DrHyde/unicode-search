@@ -17,10 +17,12 @@
             <li>Single characters, e.g. <code>9</code></li>
             <li>Numeric code points, e.g. <code>97</code> or <code>0x62</code></li>
             <li>Character (partial) names, e.g. <code>multiocular</code> (at least 4 characters)</li>
-            <li>Combinations of the above, e.g. <code>9, 97, 0x62, multiocular, 0x63 - 101, a006, 0xa006</code></li>
+            <li>Mojibake! e.g. <code>Ð¸</code> (assumes input is UTF-8 masquerading as ISO-Latin-1)</li>
+            <li>ASCII text <code>ASCII</code> (which doesn't match a character name)</li>
+            <li>Combinations of the above, e.g. <code>9, 97, 0x62, multiocular, 0x63 - 101, a006, Ð¸</code></li>
         </ul>
         <p id="githublink">Source code is available at <a href="https://github.com/DrHyde/unicode-search">GitHub</a></p>
-        <input type="search" autofocus id="inputbox" value="9, 97, 0x62, multiocular, 0x63 - 101, a006, 0xa006" size=100
+        <input type="search" autofocus id="inputbox" value="9, 97, 0x62, multiocular, 0x63 - 101, a006b, Ð¸" size=100
             onkeyup="renderCharsHTML(parseOneInput(this.value))"
             />
 

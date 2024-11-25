@@ -14,7 +14,7 @@ out/unicode-search: app.js chars.js unicode-search.cli.js
 	(echo '#!/usr/bin/env node'; cat app.js chars.js unicode-search.cli.js) > out/unicode-search
 	chmod +x out/unicode-search
 
-dev: index-compiled.html
+dev: index-compiled.html out/unicode-search
 	@npm start
 
 clean:

@@ -18,7 +18,7 @@ function renderCharsForCLI (chars) {
         .map(b => '0x' + b.toString(16).padStart(2, '0'))
         .join(' ')
     }`);
-    console.log(`     name:${charToName(char)}`);
+    console.log(`     name: ${charToName(char)}`);
     if(i < chars.length - 1) { console.log(''); }
   }
 }
