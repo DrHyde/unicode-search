@@ -24,7 +24,7 @@ function parseOneInput (userInput) {
   // } elsif( userInput contains combining characters ) {
   // ...
   } else {
-    let results = [];
+    const results = [];
     if (userInput.length >= 4) {
       unicodeDataTxt.split('\n').forEach((line) => {
         const fields = line.split(';');
@@ -33,16 +33,16 @@ function parseOneInput (userInput) {
         }
       });
     }
-    if(results.length === 0) {
+    if (results.length === 0) {
       // We got nothing, so try decoding Mojibake. We'll assume that it is
       // UTF-8 bytes represented as ISO-Latin-1
-      let bytes = [];
+      const bytes = [];
       for (let i = 0; i < userInput.length; i++) {
         // JS chars are UTF-16, so ignore the top 8 bits
         bytes.push(userInput.charCodeAt(i) & 0xff);
       }
-      while(bytes.length > 0) {
-        let utf8bytes = [];
+      while (bytes.length > 0) {
+        const utf8bytes = [];
         if (bytes[0] < 0x80) {
           // single byte character
           utf8bytes.push(bytes.shift());
@@ -68,28 +68,26 @@ function parseOneInput (userInput) {
         // At this point utf8bytes contains the bytes for a single character
 
         // lightly adapted from https://weblog.rogueamoeba.com/2017/02/27/javascript-correctly-converting-a-byte-array-to-a-utf-8-string/
-        const extraByteMap = [ 1, 1, 1, 1, 2, 2, 3, 0 ];
-        var count = utf8bytes.length;
-        var char = 0;
-        for (var index = 0;index < count;) {
+        const extraByteMap = [1, 1, 1, 1, 2, 2, 3, 0];
+        const count = utf8bytes.length;
+        let char = 0;
+        for (let index = 0; index < count;) {
           char = utf8bytes[index++];
           if (char & 0x80) {
-            var extra = extraByteMap[(char >> 3) & 0x07];
-            if (!(char & 0x40) || !extra || ((index + extra) > count))
-              return null;
+            let extra = extraByteMap[(char >> 3) & 0x07];
+            if (!(char & 0x40) || !extra || ((index + extra) > count)) { return null; }
 
             char = char & (0x3F >> extra);
-            for (;extra > 0;extra -= 1) {
-              var charx = utf8bytes[index++];
-              if ((charx & 0xC0) != 0x80)
-                return null;
+            for (;extra > 0; extra -= 1) {
+              const charx = utf8bytes[index++];
+              if ((charx & 0xC0) !== 0x80) { return null; }
 
               char = (char << 6) | (charx & 0x3F);
             }
           }
         }
 
-        if(char > 0) {
+        if (char > 0) {
           results.push(char);
         }
       }
