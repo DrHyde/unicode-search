@@ -44,3 +44,9 @@ I would especially welcome help with the following:
 # Licence
 
 GNU General Public Licence version 2.0, see the `LICENCE` file.
+
+# Screenshots
+
+![Pretty Electron app](https://github.com/user-attachments/assets/c3233d85-71ef-4432-96f1-17ff1e252a09)
+
+![Better CLI version](https://github.com/user-attachments/assets/56cdafda-b45f-4826-bfc2-86aaa3414850)
