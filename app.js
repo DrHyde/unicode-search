@@ -4,12 +4,15 @@ const csv = /^([^,]+,)+[^,]+(, *)?$/;
 function parseOneInput (userInput) {
   if (userInput.length === 0) {
     return [];
-  } else if (userInput.length === 1) {
-    return [getSingleCharFromSingleChar(userInput)];
+  } else if (
+    userInput.length === 1 ||
+    (userInput.length === 2 && userInput.codePointAt(0) > 0xffff)
+  ) {
+    return [userInput.codePointAt(0)];
   } else if (/^\d+$/.test(userInput)) {
-    return [getSingleCharFromInt(userInput)];
+    return [parseInt(userInput)];
   } else if (/^0x[a-f\d]+$/.test(userInput.toLowerCase())) {
-    return [getSingleCharFromInt(userInput)];
+    return [parseInt(userInput)];
   } else if (numberRange.test(userInput.toLowerCase())) {
     const matches = numberRange.exec(userInput.toLowerCase());
     return range(parseInt(matches[1]), parseInt(matches[2]));
@@ -103,10 +106,6 @@ function range (start, stop) {
   }
   return result;
 }
-
-function getSingleCharFromSingleChar (userInput) { return userInput.charCodeAt(0); }
-
-function getSingleCharFromInt (userInput) { return parseInt(userInput); }
 
 const charnamesByHex = new Map();
 function charToName (char) {
