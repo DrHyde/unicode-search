@@ -23,7 +23,7 @@
         </ul>
         <p id="githublink">Source code is available at <a href="https://github.com/DrHyde/unicode-search">GitHub</a></p>
         <input type="search" autofocus id="inputbox" value="9, 97, 0x62, multiocular, 0x63 - 101, a006b, Ð¸" size=100
-            onkeyup="renderCharsHTML(parseOneInput(this.value))"
+            onkeyup="dealWithInput(this.value)"
             />
 
         <table>
@@ -39,6 +39,16 @@
         </table>
     </body>
     <script>
+#include "app.js"
+#include "chars.js"
+        function dealWithInput (userInput) {
+            const url = new URL(window.location.toString());
+            url.searchParams.set("q", userInput);
+            window.history.pushState({}, "", url.toString());
+
+            renderCharsHTML(parseOneInput(userInput));
+        }
+
         function renderCharsHTML (chars) {
           // blank any previous characters
           for (let i = 0; i < 16 * 5; i++) {
@@ -81,8 +91,11 @@
             `;
           }
         }
-#include "app.js"
-#include "chars.js"
-renderCharsHTML(parseOneInput(document.getElementById("inputbox").value));
+        const url = new URL(window.location.toString());
+        const q = url.searchParams.get("q");
+        if(q !== null && q.length != 0) {
+          document.getElementById("inputbox").value = q;
+        }
+        renderCharsHTML(parseOneInput(document.getElementById("inputbox").value));
     </script>
 </html>
