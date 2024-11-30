@@ -10,6 +10,8 @@ also build a CLI version which I think is much more useful.
 # Installation / Development
 
 You will need make(1), a C pre-processer, `wget`, `node` and `npm` installed.
+If you are on Linux then you will need `rpm` even if you're not using Redhat,
+because of [a bug in Electron](https://github.com/electron/forge/issues/3772).
 
 To install Electron and all its jibber-jabber:
 
