@@ -1,36 +1,48 @@
-default:
-	@echo options: build/clean/deps/dev/lint
+.PHONY: default build install cli web dev clean lint deps test icon
 
-build: index-compiled.html out/unicode-search
+default:
+	@echo options: build/clean/cli/deps/dev/icon/lint/test/web
+
+build: cli web icon
 	@npm run make
 
 install: build
-	@rm -rf /Applications/Unicode-search.app
-	cp -a out/Unicode-search-darwin-x64/Unicode-search.app /Applications
-	cp out/unicode-search $$HOME/bin
+	@rm -rf /Applications/Unicode\ Search.app
+	cp -a out/unicode-search-darwin-x64/Unicode\ Search.app /Applications
+	cp out/unicode-search $$HOME/bin/unicode-search
+	chmod +x $$HOME/bin/unicode-search
 
-out/unicode-search: app.js chars.js unicode-search.cli.js
-	@mkdir out 2>/dev/null || true
-	(echo '#!/usr/bin/env node'; cat app.js chars.js unicode-search.cli.js) > out/unicode-search
-	chmod +x out/unicode-search
+cli: out/unicode-search
 
-dev: index-compiled.html out/unicode-search
+web: out/unicode-search.html
+
+icon: assets/icon.png
+
+dev:
 	@npm start
 
 clean:
-	@rm -rf out index-compiled.html chars.js
+	@rm -rf out assets/icon.png assets/icon.icns
 
 lint:
-	@npx semistandard
+	@npm run lint
 
 deps:
-	@npm install --save-dev electron
-	@npm install --save-dev @electron-forge/cli
-	@npm install --save-dev semistandard
-	@npx electron-forge import
+	@npm install
+	npm install playwright
+	npx playwright install chromium firefox webkit
 
-index-compiled.html: index.html app.js chars.js
-	cpp -w -P index.html index-compiled.html
+test: cli web icon
+	@npm test
 
-chars.js:
-	(printf 'let unicodeDataTxt = `';wget -q https://unicode.org/Public/UNIDATA/UnicodeData.txt -O -;echo '`;')>chars.js
+data/UnicodeData.txt:
+	@node scripts/ensure-unicode-data.js
+
+assets/icon.png: assets/icon.svg scripts/build-icon.js
+	@npm run build:icon
+
+out/unicode-search: src/cli/run-cli.js src/shared/unicode-core.js scripts/build-cli.js data/UnicodeData.txt
+	@npm run build:cli
+
+out/unicode-search.html: index.html renderer.js src/shared/unicode-core.js scripts/build-web.js data/UnicodeData.txt
+	@npm run build:web

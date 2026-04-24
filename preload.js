@@ -1,8 +1,6 @@
-window.addEventListener('DOMContentLoaded', () => {
-  const replaceText = (selector, text) => {
-    const element = document.getElementById(selector);
-    if (element) element.innerText = text;
-  };
+const { contextBridge } = require('electron');
+const { search } = require('./src/shared/unicode');
 
-  replaceText('githublink', '');
+contextBridge.exposeInMainWorld('unicodeSearch', {
+  search
 });

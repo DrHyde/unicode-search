@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Unicode Search icon</title>
+  <desc id="desc">A stylized icon based on Unicode code point U+13008, Egyptian Hieroglyph A006B.</desc>
+  <defs>
+    <radialGradient id="bg" cx="35%" cy="30%" r="85%">
+      <stop offset="0%" stop-color="#253b70" />
+      <stop offset="55%" stop-color="#162447" />
+      <stop offset="100%" stop-color="#0b1224" />
+    </radialGradient>
+    <linearGradient id="glyph" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f9e3a3" />
+      <stop offset="100%" stop-color="#d8ad46" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#020617" flood-opacity="0.45" />
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="120" fill="url(#bg)" />
+  <circle cx="256" cy="184" r="140" fill="#f7c75c" opacity="0.08" />
+  <circle cx="256" cy="184" r="104" fill="#f7c75c" opacity="0.06" />
+
+  <text
+    x="256"
+    y="70"
+    text-anchor="middle"
+    font-size="42"
+    letter-spacing="2"
+    fill="#f8e5b2"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+  >Unicode Search</text>
+
+  <g filter="url(#shadow)">
+    <text
+      x="256"
+      y="366"
+      text-anchor="middle"
+      font-size="278"
+      fill="url(#glyph)"
+      font-family="'Noto Sans Egyptian Hieroglyphs', 'Segoe UI Historic', 'Apple Symbols', serif"
+    >&#x13008;</text>
+  </g>
+
+  <g opacity="0.95">
+    <rect x="168" y="398" width="176" height="44" rx="22" fill="#0f172a" fill-opacity="0.78" stroke="#f6d278" stroke-opacity="0.22" />
+    <text
+      x="256"
+      y="426"
+      text-anchor="middle"
+      font-size="24"
+      letter-spacing="3"
+      fill="#f8e5b2"
+      font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    >U+13008</text>
+  </g>
+</svg>

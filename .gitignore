@@ -1,6 +1,8 @@
 node_modules/
-index-compiled.html
-chars.js
+data/UnicodeData.txt
 *.swp
 out/
 .DS_Store
+data/
+assets/icon.png
+assets/icon.icns

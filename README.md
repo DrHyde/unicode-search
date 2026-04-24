@@ -2,31 +2,67 @@
 
 This is a simple Electron app that lets you search for characters,
 by name, by character, or by code point, and see useful information
-about them.
+about them. It also builds a command-line app with much the same
+functionality, and a self-contained web page that you can put wherever
+you like such as a corporate intranet.
 
-Most of the code is, of course, not Electron-specific, and it will
-also build a CLI version which I think is much more useful.
+Most of the code is not Electron-specific.
+
+Unicode character data comes from the Unicode consoritum's web site at
+https://unicode.org/Public/UNIDATA/UnicodeData.txt and is downloaded
+when needed for local development or builds.
 
 # Installation / Development
 
-You will need make(1), a C pre-processer, `wget`, `node` and `npm` installed.
-If you are on Linux then you will need `rpm` even if you're not using Redhat,
-because of [a bug in Electron](https://github.com/electron/forge/issues/3772).
+You will need `node` and `npm` installed.
 
-To install Electron and all its jibber-jabber:
+Install dependencies:
 
 - make deps
 
-To build it:
+Delete old build artifacts
+
+-make clean
+
+Run the Electron app in development:
+
+- npm start
+
+Build the packaged app, standalone CLI artifact, and standalone web page:
 
 - make build
 
-then look in the `out` directory for your platform's favourite
-flavour of executable.
+Build just the standalone CLI artifact:
 
-Or you can `make dev` to run it in dev mode.
+- make cli
 
-To clear out auto-generated files and built artifacts, `make clean`.
+Build just the standalone web page:
+
+- make web
+
+Regenerate the Electron app icon assets from the SVG source:
+
+- make icon
+
+Run the CLI directly:
+
+- out/unicode-search <characters>
+
+Open the standalone web build directly in a browser:
+
+- open out/unicode-search.html
+
+Run tests:
+
+- npm test
+
+`npm test` exercises the shared Unicode logic, the standalone CLI build,
+the standalone web page in Chromium/Firefox/WebKit,
+and the Electron app render path.
+
+Run linting:
+
+- npm run lint
 
 If you are on a Mac and have a `$HOME/bin` then you can:
 
@@ -37,11 +73,6 @@ If you are on a Mac and have a `$HOME/bin` then you can:
 Patches and bug reports are most welcome. Please raise them on
 Github. Feature requests are far more likely to be implemented
 by *you* than by me.
-
-I would especially welcome help with the following:
-
-- Making it pretty
-- CI stuff to build releases for all platforms
 
 # Licence
 

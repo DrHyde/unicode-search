@@ -1,13 +1,22 @@
 {
-  "name": "Unicode-search",
-  "version": "0.0.1",
+  "name": "unicode-search",
+  "productName": "Unicode Search",
+  "version": "1.0.0",
   "description": "Search for Unicode characters, by name, by code point, and by encoded bytes",
   "main": "main.js",
+  "bin": {
+    "unicode-search": "./src/cli/run-cli.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "ensure:unicode-data": "node scripts/ensure-unicode-data.js",
+    "build:icon": "node scripts/build-icon.js",
+    "build:cli": "npm run ensure:unicode-data && node scripts/build-cli.js",
+    "build:web": "npm run ensure:unicode-data && node scripts/build-web.js",
+    "lint": "semistandard .",
+    "test": "npm run ensure:unicode-data && node --test",
+    "start": "npm run ensure:unicode-data && npm run build:icon && electron-forge start",
+    "package": "npm run ensure:unicode-data && npm run build:icon && electron-forge package",
+    "make": "npm run ensure:unicode-data && npm run build:icon && electron-forge make"
   },
   "author": "David Cantrell",
   "repository": {
@@ -28,6 +37,7 @@
     "semistandard": "^17.0.0"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1"
+    "electron-squirrel-startup": "^1.0.1",
+    "playwright": "^1.59.1"
   }
 }

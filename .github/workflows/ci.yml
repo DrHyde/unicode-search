@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  determine-node-versions:
+    runs-on: macos-latest
+    outputs:
+      versions: ${{ steps.versions.outputs.versions }}
+
+    steps:
+      - name: Determine Node.js versions
+        id: versions
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          import urllib.request
+
+          with urllib.request.urlopen('https://nodejs.org/dist/index.json') as response:
+              releases = json.load(response)
+
+          latest_by_major = {}
+          for release in releases:
+              version = release['version'].lstrip('v')
+              major = int(version.split('.')[0])
+              latest_by_major.setdefault(major, version)
+              if len(latest_by_major) == 3:
+                  break
+
+          selected = [latest_by_major[major] for major in sorted(latest_by_major, reverse=True)]
+          print(f"versions={json.dumps(selected)}")
+          PY
+
+  test:
+    needs: determine-node-versions
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ${{ fromJson(needs.determine-node-versions.outputs.versions) }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6.0.2
+
+      - name: Set up Node.js (${{ matrix.node-version }})
+        uses: actions/setup-node@v6.4.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium firefox webkit
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run lint
+        run: npm run lint
