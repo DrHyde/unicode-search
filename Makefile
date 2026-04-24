@@ -8,7 +8,7 @@ build: cli web icon
 
 install: build
 	@rm -rf /Applications/Unicode\ Search.app
-	cp -a out/unicode-search-darwin-x64/Unicode\ Search.app /Applications
+	cp -a "out/Unicode Search-darwin-x64/Unicode Search.app" /Applications
 	cp out/unicode-search $$HOME/bin/unicode-search
 	chmod +x $$HOME/bin/unicode-search
 
