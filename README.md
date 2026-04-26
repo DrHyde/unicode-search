@@ -80,6 +80,6 @@ GNU General Public Licence version 2.0, see the `LICENCE` file.
 
 # Screenshots
 
-![Pretty Electron app](https://github.com/user-attachments/assets/c3233d85-71ef-4432-96f1-17ff1e252a09)
+![Pretty Electron app](https://github.com/user-attachments/assets/c9c150ae-9702-4cad-b9f6-ffccfb418c83)
 
-![Better CLI version](https://github.com/user-attachments/assets/56cdafda-b45f-4826-bfc2-86aaa3414850)
+![Better CLI version](https://github.com/user-attachments/assets/bb105b9e-63ea-4dc3-8df5-e61a7c4d827d)
