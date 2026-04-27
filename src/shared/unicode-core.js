@@ -7,13 +7,15 @@ function createUnicodeTools (unicodeDataTxt) {
   const utf8Encoder = new TextEncoder();
   const unicodeEntries = [];
   const namesByCodePoint = new Map();
+  const combiningClassesByCodePoint = new Map();
 
   for (const line of unicodeDataTxt.trim().split('\n')) {
-    const [hexCodePoint, name] = line.split(';');
+    const [hexCodePoint, name, , canonicalCombiningClass] = line.split(';');
     const codePoint = Number.parseInt(hexCodePoint, 16);
 
     unicodeEntries.push({ codePoint, name });
     namesByCodePoint.set(codePoint, name);
+    combiningClassesByCodePoint.set(codePoint, Number.parseInt(canonicalCombiningClass, 10));
   }
 
   function parseInput (userInput) {
@@ -115,6 +117,7 @@ function createUnicodeTools (unicodeDataTxt) {
   function getCharacterInfo (codePoint) {
     const name = charToName(codePoint);
     const glyph = String.fromCodePoint(codePoint);
+    const combiningClass = combiningClassesByCodePoint.get(codePoint) || 0;
 
     return {
       codePoint,
@@ -123,6 +126,7 @@ function createUnicodeTools (unicodeDataTxt) {
       displayGlyph: name && name.startsWith('COMBINING')
         ? String.fromCodePoint(0x25CC) + glyph
         : glyph,
+      combiningClass,
       name,
       utf8Bytes: charToUtf8Bytes(codePoint)
     };

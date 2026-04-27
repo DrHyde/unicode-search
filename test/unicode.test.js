@@ -46,9 +46,15 @@ test('search returns renderer-friendly character info', () => {
     hexCodePoint: '0x41',
     glyph: 'A',
     displayGlyph: 'A',
+    combiningClass: 0,
     name: 'LATIN CAPITAL LETTER A',
     utf8Bytes: [0x41]
   });
+});
+
+test('search prepends dotted circle to combining marks', () => {
+  assert.equal(search('\u0301')[0].displayGlyph, '\u25cc\u0301');
+  assert.equal(search('\u0327')[0].combiningClass, 202);
 });
 
 test('build:cli emits a standalone CLI artifact', () => {
@@ -138,6 +144,72 @@ test('electron app renders result cards', async () => {
     assert.equal(rendered.glyph, '9');
     assert.match(rendered.bodyText, /DIGIT NINE/);
     assert.match(rendered.bodyText, /LATIN SMALL LETTER A/);
+  } finally {
+    await app.close();
+  }
+});
+
+test('electron app only applies the combining-mark glyph font override to combining marks', async () => {
+  const app = await electron.launch({
+    args: ['.'],
+    cwd: repoRoot
+  });
+
+  try {
+    const window = await app.firstWindow();
+    await window.fill('#inputbox', '\u0301');
+    await window.waitForFunction(() => document.querySelectorAll('.result-card').length > 0);
+
+    const combiningGlyph = await window.evaluate(() => {
+      const glyph = document.querySelector('.result-glyph');
+      const preview = glyph?.querySelector('.combining-mark-preview');
+      return {
+        text: glyph?.textContent || null,
+        className: glyph?.className || null,
+        fontFamily: glyph ? window.getComputedStyle(glyph).fontFamily : null,
+        previewClassName: preview?.className || null
+      };
+    });
+
+    assert.equal(combiningGlyph.text, '\u25cc\u0301');
+    assert.match(combiningGlyph.className, /\bcombining-mark\b/);
+    assert.equal(combiningGlyph.fontFamily, 'sans-serif');
+    assert.equal(
+      combiningGlyph.previewClassName,
+      'combining-mark-preview mark-above mark-center'
+    );
+
+    await window.fill('#inputbox', '\u0323');
+    await window.waitForFunction(() => document.querySelector('.result-glyph')?.textContent === '\u25cc\u0323');
+
+    const belowMarkGlyph = await window.evaluate(() =>
+      document.querySelector('.combining-mark-preview')?.className || null
+    );
+
+    assert.equal(belowMarkGlyph, 'combining-mark-preview mark-below mark-center');
+
+    await window.fill('#inputbox', '\u0327');
+    await window.waitForFunction(() => document.querySelector('.result-glyph')?.textContent === '\u25cc\u0327');
+
+    const cedillaGlyph = await window.evaluate(() =>
+      document.querySelector('.combining-mark-preview')?.className || null
+    );
+
+    assert.equal(cedillaGlyph, 'combining-mark-preview mark-below mark-center');
+
+    await window.fill('#inputbox', 'ꙮ,𓀈,β,ð');
+    await window.waitForFunction(() => document.querySelectorAll('.result-card').length === 4);
+
+    const regularGlyphs = await window.evaluate(() => Array.from(document.querySelectorAll('.result-glyph')).map((glyph) => ({
+      text: glyph.textContent,
+      className: glyph.className
+    })));
+
+    assert.deepEqual(
+      regularGlyphs.map(({ text }) => text),
+      ['ꙮ', '𓀈', 'β', 'ð']
+    );
+    assert.ok(regularGlyphs.every(({ className }) => className === 'result-glyph'));
   } finally {
     await app.close();
   }

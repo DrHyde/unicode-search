@@ -61,10 +61,58 @@ function createResultCard (character) {
 
   const glyph = document.createElement('div');
   glyph.className = 'result-glyph';
-  glyph.textContent = character.displayGlyph;
+  if (character.displayGlyph !== character.glyph) {
+    glyph.classList.add('combining-mark');
+    glyph.append(createCombiningMarkPreview(character));
+  } else {
+    glyph.textContent = character.displayGlyph;
+  }
   card.append(glyph, createResultTable(character));
 
   return card;
+}
+
+function createCombiningMarkPreview (character) {
+  const preview = document.createElement('span');
+  preview.className = `combining-mark-preview ${getCombiningMarkPreviewClass(character)}`;
+
+  const base = document.createElement('span');
+  base.className = 'combining-mark-base';
+  base.textContent = String.fromCodePoint(0x25CC);
+
+  const mark = document.createElement('span');
+  mark.className = 'combining-mark-accent';
+  mark.textContent = character.glyph;
+
+  preview.append(base, mark);
+  return preview;
+}
+
+function getCombiningMarkPreviewClass (character) {
+  const upperName = (character.name || '').toUpperCase();
+  const combiningClass = character.combiningClass || 0;
+
+  if (upperName.includes('ENCLOSING')) {
+    return 'mark-enclosing';
+  }
+
+  if (upperName.includes('OVERLAY') || combiningClass === 1) {
+    return 'mark-overlay';
+  }
+
+  const vertical = combiningClass === 202 ||
+    combiningClass === 220 ||
+    upperName.includes('BELOW') ||
+    upperName.includes('SUBSCRIPT')
+    ? 'below'
+    : 'above';
+  const horizontal = upperName.includes('LEFT')
+    ? 'left'
+    : upperName.includes('RIGHT') || combiningClass === 232
+      ? 'right'
+      : 'center';
+
+  return `mark-${vertical} mark-${horizontal}`;
 }
 
 function createResultTable (character) {

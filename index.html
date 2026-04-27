@@ -117,6 +117,62 @@
         margin-bottom: 1rem;
       }
 
+      .result-glyph.combining-mark {
+        font-family: sans-serif;
+        line-height: 1;
+      }
+
+      .combining-mark-preview {
+        position: relative;
+        display: inline-block;
+        width: 1em;
+        height: 1.35em;
+      }
+
+      .combining-mark-base,
+      .combining-mark-accent {
+        position: absolute;
+        left: 50%;
+      }
+
+      .combining-mark-base {
+        bottom: 0;
+        transform: translateX(-50%);
+      }
+
+      .combining-mark-accent {
+        top: -0.05em;
+        left: calc(50% + 0.28em);
+        transform: translateX(-50%);
+      }
+
+      .mark-left .combining-mark-accent {
+        left: 0.12em;
+        transform: none;
+      }
+
+      .mark-right .combining-mark-accent {
+        left: auto;
+        right: 0.12em;
+        transform: none;
+      }
+
+      .mark-below .combining-mark-accent {
+        top: auto;
+        bottom: -0.16em;
+      }
+
+      .mark-overlay .combining-mark-accent,
+      .mark-enclosing .combining-mark-accent {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .mark-enclosing .combining-mark-accent {
+        font-size: 1.2em;
+      }
+
       .result-table {
         width: 100%;
         border-collapse: collapse;
