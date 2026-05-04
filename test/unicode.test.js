@@ -62,6 +62,21 @@ test('search prepends dotted circle to combining marks', () => {
   assert.equal(search('\u0327')[0].combiningClass, 202);
 });
 
+test('search splits emoji variation sequences into separate characters', () => {
+  assert.deepEqual(
+    search('🧙‍♂️').map((character) => ({
+      codePoint: character.codePoint,
+      name: character.name
+    })),
+    [
+      { codePoint: 0x1f9d9, name: 'MAGE' },
+      { codePoint: 0x200d, name: 'ZERO WIDTH JOINER' },
+      { codePoint: 0x2642, name: 'MALE SIGN' },
+      { codePoint: 0xfe0f, name: 'VARIATION SELECTOR-16' }
+    ]
+  );
+});
+
 test('build:cli emits a standalone CLI artifact', () => {
   execFileSync(process.execPath, ['scripts/build-cli.js'], {
     cwd: repoRoot,
@@ -222,6 +237,37 @@ test('electron app only applies the combining-mark glyph font override to combin
   }
 });
 
+test('standalone web page renders emoji variation sequences as separate cards', async () => {
+  execFileSync(process.execPath, ['scripts/build-web.js'], {
+    cwd: repoRoot,
+    stdio: 'inherit'
+  });
+
+  const browser = await chromium.launch({ headless: true });
+
+  try {
+    const page = await browser.newPage();
+    await page.goto('file://' + path.resolve(repoRoot, 'out', 'unicode-search.html'));
+    await assertEmojiVariationSequenceRenders(page);
+  } finally {
+    await browser.close();
+  }
+});
+
+test('electron app renders emoji variation sequences as separate cards', async () => {
+  const app = await electron.launch({
+    args: ['.'],
+    cwd: repoRoot
+  });
+
+  try {
+    const window = await app.firstWindow();
+    await assertEmojiVariationSequenceRenders(window);
+  } finally {
+    await app.close();
+  }
+});
+
 async function assertStandalonePageRenders (browserType) {
   execFileSync(process.execPath, ['scripts/build-web.js'], {
     cwd: repoRoot,
@@ -251,4 +297,23 @@ async function assertStandalonePageRenders (browserType) {
   } finally {
     await browser.close();
   }
+}
+
+async function assertEmojiVariationSequenceRenders (page) {
+  await page.fill('#inputbox', '🧙‍♂️');
+  await page.waitForFunction(() => document.querySelectorAll('.result-card').length === 4);
+
+  const rendered = await page.evaluate(() => Array.from(document.querySelectorAll('.result-card')).map((card) => ({
+    glyph: card.querySelector('.result-glyph')?.textContent || null,
+    text: card.innerText
+  })));
+
+  assert.deepEqual(
+    rendered.map(({ glyph }) => glyph),
+    ['🧙', '\u200d', '♂', '\ufe0f']
+  );
+  assert.match(rendered[0].text, /MAGE/);
+  assert.match(rendered[1].text, /ZERO WIDTH JOINER/);
+  assert.match(rendered[2].text, /MALE SIGN/);
+  assert.match(rendered[3].text, /VARIATION SELECTOR-16/);
 }
