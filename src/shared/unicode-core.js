@@ -20,14 +20,14 @@ function createUnicodeTools (unicodeDataTxt) {
 
   function parseInput (userInput) {
     const normalizedInput = userInput.trim();
+    const literalCodePoints = Array.from(normalizedInput, character => character.codePointAt(0));
 
     if (normalizedInput.length === 0) {
       return [];
     }
 
-    const characters = Array.from(normalizedInput);
-    if (characters.length === 1) {
-      return [characters[0].codePointAt(0)];
+    if (literalCodePoints.length === 1) {
+      return literalCodePoints;
     }
 
     if (/^\d+$/.test(normalizedInput)) {
@@ -59,7 +59,11 @@ function createUnicodeTools (unicodeDataTxt) {
       }
     }
 
-    return decodeMojibake(normalizedInput);
+    if (literalCodePoints.some(codePoint => codePoint > 0xff)) {
+      return literalCodePoints;
+    }
+
+    return decodeMojibake(normalizedInput) || literalCodePoints;
   }
 
   function parseCodePoint (value) {
@@ -99,7 +103,7 @@ function createUnicodeTools (unicodeDataTxt) {
       return Array.from(decoded, character => character.codePointAt(0));
     } catch (error) {
       if (error instanceof TypeError) {
-        return [];
+        return null;
       }
 
       throw error;

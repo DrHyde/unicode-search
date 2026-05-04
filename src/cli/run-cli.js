@@ -190,7 +190,7 @@ Each of <characters> can be:
   * a hexadecimal codepoint, eg '0x41'
   * a range of codepoints, eg '65-0x5a'
   * the (partial, at least 4 characters) name of a character, eg 'combining caron'
-  * ASCII text (if it doesn't match a character name), eg 'hello'
+  * text (if it doesn't match a character name), eg 'hello' or 'café'
   * Mojibake! (assumed to be a bunch of single byte characters that ought to
       be UTF-8 encoded), eg Ð¸
 `;

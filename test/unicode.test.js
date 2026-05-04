@@ -35,6 +35,11 @@ test('parseInput decodes mojibake as UTF-8 masquerading as Latin-1', () => {
   assert.deepEqual(parseInput('Ð¸'), [0x438]);
 });
 
+test('parseInput keeps literal accented characters', () => {
+  assert.deepEqual(parseInput('café'), [0x63, 0x61, 0x66, 0xe9]);
+  assert.deepEqual(parseInput('cafe\u0301'), [0x63, 0x61, 0x66, 0x65, 0x301]);
+});
+
 test('shared helpers expose names and UTF-8 bytes', () => {
   assert.equal(charToName(65), 'LATIN CAPITAL LETTER A');
   assert.deepEqual(charToUtf8Bytes(0x438), [0xd0, 0xb8]);
@@ -141,8 +146,10 @@ test('electron app renders result cards', async () => {
     }));
 
     assert.ok(rendered.cards > 0);
-    assert.equal(rendered.glyph, '9');
-    assert.match(rendered.bodyText, /DIGIT NINE/);
+    assert.equal(rendered.glyph, 'e');
+    assert.match(rendered.bodyText, /LATIN SMALL LETTER E/);
+    assert.match(rendered.bodyText, /COMBINING MACRON/);
+    assert.match(rendered.bodyText, /COMBINING ACUTE ACCENT/);
     assert.match(rendered.bodyText, /LATIN SMALL LETTER A/);
   } finally {
     await app.close();
@@ -236,8 +243,10 @@ async function assertStandalonePageRenders (browserType) {
     }));
 
     assert.ok(rendered.cards > 0);
-    assert.equal(rendered.glyph, '9');
-    assert.match(rendered.bodyText, /DIGIT NINE/);
+    assert.equal(rendered.glyph, 'e');
+    assert.match(rendered.bodyText, /LATIN SMALL LETTER E/);
+    assert.match(rendered.bodyText, /COMBINING MACRON/);
+    assert.match(rendered.bodyText, /COMBINING ACUTE ACCENT/);
     assert.match(rendered.bodyText, /LATIN SMALL LETTER A/);
   } finally {
     await browser.close();
