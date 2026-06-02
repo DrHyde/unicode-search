@@ -1,7 +1,7 @@
 .PHONY: default build install cli web dev clean lint deps test icon
 
 default:
-	@echo options: build/clean/cli/deps/dev/icon/lint/test/web
+	@echo options: build/clean/cli/deps/dev/icon/install/lint/test/web
 
 build: cli web icon
 	@npm run make
