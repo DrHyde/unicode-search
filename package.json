@@ -8,6 +8,7 @@
     "unicode-search": "./src/cli/run-cli.js"
   },
   "scripts": {
+    "postinstall": "node scripts/patch-electron-build.js",
     "ensure:unicode-data": "node scripts/ensure-unicode-data.js",
     "build:icon": "node scripts/build-icon.js",
     "build:cli": "npm run ensure:unicode-data && node scripts/build-cli.js",
@@ -33,11 +34,11 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.11.1",
     "@electron-forge/plugin-fuses": "^7.11.1",
     "@electron/fuses": "^1.8.0",
-    "electron": "^41.4.0",
+    "electron": "^41.7.1",
+    "playwright": "^1.60.0",
     "semistandard": "^17.0.0"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1",
-    "playwright": "^1.60.0"
+    "electron-squirrel-startup": "^1.0.1"
   }
 }
