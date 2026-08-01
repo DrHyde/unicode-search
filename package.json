@@ -35,7 +35,7 @@
     "@electron-forge/plugin-fuses": "^7.11.2",
     "@electron/fuses": "^1.8.0",
     "electron": "^41.7.1",
-    "playwright": "^1.60.0",
+    "playwright": "^1.61.1",
     "semistandard": "^17.0.0"
   },
   "dependencies": {
