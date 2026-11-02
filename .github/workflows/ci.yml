@@ -35,10 +35,12 @@ jobs:
 
           # Get the very latest version (any major) if not already included
           latest_version = None
+          latest_major = 0
           for release in releases:
               version = release['version'].lstrip('v')
               major = int(version.split('.')[0])
-              if version > (latest_version or '0.0.0'):
+              if major > latest_major:
+                  latest_major = major
                   latest_version = version
 
           if latest_version and latest_version not in selected:
