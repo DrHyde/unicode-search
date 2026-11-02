@@ -28,19 +28,16 @@ const packagerUnzipPath = path.join(root, 'node_modules', '@electron', 'packager
 const patchedUnzip = `"use strict";
 // Patched by scripts/patch-electron-build.js to use system unzip instead of
 // extract-zip/yauzl, which hangs on Node.js v24 for certain zip entries.
-const { execSync } = require('child_process');
-async function extractElectronZip (zipPath, targetDir) {
+import { execSync } from 'child_process';
+
+export async function extractElectronZip (zipPath, targetDir) {
   execSync('unzip -q ' + JSON.stringify(zipPath) + ' -d ' + JSON.stringify(targetDir), { stdio: 'pipe' });
 }
-exports.extractElectronZip = extractElectronZip;
 `;
 
 if (fs.existsSync(packagerUnzipPath)) {
-  const current = fs.readFileSync(packagerUnzipPath, 'utf8');
-  if (!current.includes('Patched by scripts/patch-electron-build.js')) {
-    fs.writeFileSync(packagerUnzipPath, patchedUnzip);
-    console.log('Patched @electron/packager/dist/unzip.js (yauzl/Node 24 workaround)');
-  }
+  fs.writeFileSync(packagerUnzipPath, patchedUnzip);
+  console.log('Patched @electron/packager/dist/unzip.js (yauzl/Node 24 workaround, ES module)');
 } else {
   console.warn('WARNING: @electron/packager/dist/unzip.js not found — skipping patch');
 }
@@ -62,7 +59,7 @@ if (!electronNeedsInstall()) {
 }
 
 const { version } = require(path.join(electronDir, 'package.json'));
-const { downloadArtifact } = require(path.join(root, 'node_modules', '@electron', 'get'));
+const { downloadArtifact } = require(path.join(root, 'node_modules', '@electron', 'get', 'dist', 'index.js'));
 const checksums = require(path.join(electronDir, 'checksums.json'));
 
 console.log(`Installing electron v${version} (yauzl/Node 24 workaround) ...`);
