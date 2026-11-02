@@ -21,15 +21,29 @@ jobs:
           with urllib.request.urlopen('https://nodejs.org/dist/index.json') as response:
               releases = json.load(response)
 
+          # Get latest LTS versions (even majors: 22, 24, 26...)
           latest_by_major = {}
           for release in releases:
               version = release['version'].lstrip('v')
               major = int(version.split('.')[0])
-              latest_by_major.setdefault(major, version)
-              if len(latest_by_major) == 3:
-                  break
+              if major % 2 == 0:
+                  latest_by_major.setdefault(major, version)
+                  if len(latest_by_major) == 3:
+                      break
 
           selected = [latest_by_major[major] for major in sorted(latest_by_major, reverse=True)]
+
+          # Get the very latest version (any major) if not already included
+          latest_version = None
+          for release in releases:
+              version = release['version'].lstrip('v')
+              major = int(version.split('.')[0])
+              if version > (latest_version or '0.0.0'):
+                  latest_version = version
+
+          if latest_version and latest_version not in selected:
+              selected.append(latest_version)
+
           print(f"versions={json.dumps(selected)}")
           PY
 
